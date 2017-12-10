@@ -1,12 +1,12 @@
-import ScrollList from './scroll-list'
+import Scroll from './scroll'
 
-ScrollList.version = __VERSION__
-ScrollList.install = function(Vue) {
-  Vue.component(ScrollList.name, ScrollList)
+Scroll.version = __VERSION__
+Scroll.install = function(Vue) {
+  Vue.component(Scroll.name, Scroll)
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(ScrollList)
+  window.Vue.use(Scroll)
 }
 
-export default ScrollList
+export default Scroll
