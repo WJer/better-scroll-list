@@ -43,6 +43,8 @@
   import Loading from './components/loading/loading'
   import BScroll from 'better-scroll'
   import {getRect} from './common/js/utils'
+  import {scrollMixin} from './common/js/mixins'
+  import {EVENT_PULLING_DOWN, EVENT_PULLING_UP, DIRECTION_H, DIRECTION_V} from './common/js/config'
 
   const COMPONENT_NAME = 'scroll-list'
 
@@ -51,13 +53,8 @@
   const DEFAULT_REFRESH_TXT = '刷新成功'
   const DEFAULT_REFRESH_FAIL_TXT = '刷新失败'
 
-  const DIRECTION_H = 'horizontal'
-  const DIRECTION_V = 'vertical'
-
   const EVENT_SCROLL = 'scroll'
   const EVENT_BEFORE_SCROLL_START = 'before-scroll-start'
-  const EVENT_PULLING_DOWN = 'pulling-down'
-  const EVENT_PULLING_UP = 'pulling-up'
 
   const DEFAULT_OPTIONS = {
     observeDOM: true,
@@ -70,40 +67,7 @@
 
   export default {
     name: COMPONENT_NAME,
-    props: {
-      direction: {
-        type: String,
-        default: DIRECTION_V
-      },
-      data: {
-        type: Array,
-        default() {
-          return []
-        }
-      },
-      options: {
-        type: Object,
-        default() {
-          return {}
-        }
-      },
-      listenScroll: {
-        type: Boolean,
-        default: false
-      },
-      listenBeforeScroll: {
-        type: Boolean,
-        default: false
-      },
-      refreshDelay: {
-        type: Number,
-        default: 20
-      },
-      initMinHeight: {
-        type: Boolean,
-        default: true
-      }
-    },
+    mixins: [scrollMixin],
     data() {
       return {
         beforePullDown: true,
@@ -297,7 +261,10 @@
   @require '~assets/variables.styl'
 
   .scroll-list-wrapper
-    height: 100%
+    position: relative
+    flex: 1
+    overflow:hidden
+    width:100%
     background-color: $scroll-content-bgc
     .scroll-content
       position: relative

@@ -1,25 +1,28 @@
 <template>
-  <scroll-list ref="scroll" :data="data"
-               :options="scrollOptions">
-    <slot name="pulldown"></slot>
-    <slot></slot>
-    <slot name="pullup"></slot>
-  </scroll-list>
+  <div class="vue-scroll">
+    <slot name="top"></slot>
+    <scroll-list ref="scroll" :data="data"
+               :options="scrollOptions" @pulling-down="onPullingDown"
+                 @pulling-up="onPullingUp">
+      <slot name="pulldown"></slot>
+      <slot></slot>
+      <slot name="pullup"></slot>
+    </scroll-list>
+    <slot name="bottom"></slot>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
   import ScrollList from './scroll-list'
+  import {scrollMixin} from './common/js/mixins'
+  import {EVENT_PULLING_DOWN, EVENT_PULLING_UP} from './common/js/config'
+
   const COMPONENT_NAME = 'vue-scroll'
 
   export default {
     name: COMPONENT_NAME,
+    mixins: [scrollMixin],
     props: {
-      data: {
-        type: Array,
-        default() {
-          return []
-        }
-      },
       scrollbar: {
         type: Boolean,
         default: true
@@ -48,7 +51,7 @@
         type: String,
         default: '刷新失败'
       },
-      pullUpload: {
+      pullUpLoad: {
         type: Boolean,
         default: true
       },
@@ -84,7 +87,7 @@
           errorTxt: this.pullDownRefreshFailTxt
         } : false
       },
-      pullUpLoadObj: function () {
+      pullUpLoadObj() {
         return this.pullUpLoad ? {
           threshold: parseInt(this.pullUpLoadThreshold),
           txt: {
@@ -94,11 +97,44 @@
         } : false
       }
     },
+    methods: {
+      onPullingDown() {
+        this.$emit(EVENT_PULLING_DOWN)
+      },
+      onPullingUp() {
+        this.$emit(EVENT_PULLING_UP)
+      },
+      disable() {
+        this.$refs.scroll && this.$refs.scroll.disable()
+      },
+      enable() {
+        this.$refs.scroll && this.$refs.scroll.enable()
+      },
+      refresh() {
+        this.$refs.scroll && this.$refs.scroll.refresh()
+      },
+      destroy() {
+        this.$refs.scroll && this.$refs.scroll.destroy()
+      },
+      scrollTo() {
+        this.$refs.scroll && this.$refs.scroll.scrollTo.apply(this.scroll, arguments)
+      },
+      scrollToElement() {
+        this.$refs.scroll && this.$refs.scroll.scrollToElement.apply(this.scroll, arguments)
+      },
+      rebuild() {
+        this.$refs.scroll && this.$refs.scroll.rebuild()
+      }
+    },
     components: {
       ScrollList
     }
   }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
+  .vue-scroll
+    display: flex
+    flex-direction: column
+    height:100%
 </style>
