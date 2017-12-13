@@ -1255,7 +1255,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     };
   }
 
-  _scroll2.default.version = "0.5.1";
+  _scroll2.default.version = '0.5.1';
   _scroll2.default.install = function (Vue) {
     Vue.component(_scroll2.default.name, _scroll2.default);
   };
