@@ -43,7 +43,10 @@
   import Loading from './components/loading/loading'
   import BScroll from 'better-scroll'
   import {getRect} from './common/js/utils'
-  import {EVENT_PULLING_DOWN, EVENT_PULLING_UP, DIRECTION_H, DIRECTION_V} from './common/js/config'
+  import {EVENT_PULLING_DOWN, EVENT_PULLING_UP, DIRECTION_H,
+    DIRECTION_V, EVENT_BEFORE_SCROLL_START, EVENT_SCROLL,
+  EVENT_SCROLL_START, EVENT_SCROLL_END, EVENT_TOUCH_END,
+    EVENT_FLICK, EVENT_REFRESH, EVENT_DESTROY} from './common/js/config'
 
   const COMPONENT_NAME = 'scroll-list'
 
@@ -51,9 +54,6 @@
   const DEFAULT_LOAD_TXT_NO_MORE = '没有更多了'
   const DEFAULT_REFRESH_TXT = '刷新成功'
   const DEFAULT_REFRESH_FAIL_TXT = '刷新失败'
-
-  const EVENT_SCROLL = 'scroll'
-  const EVENT_BEFORE_SCROLL_START = 'before-scroll-start'
 
   const DEFAULT_OPTIONS = {
     observeDOM: true,
@@ -131,14 +131,44 @@
           scrollX: this.options.direction === DIRECTION_H
         }, this.options)
         this.scroll = new BScroll(this.$refs.wrapper, options)
-        if (this.options.listenScroll) {
+        if (this.options.listenBeforeScroll) {
+          this.scroll.on('beforeScrollStart', () => {
+            this.$emit(EVENT_BEFORE_SCROLL_START)
+          })
+        }
+        if (this.options.listenScrollStart) {
+          this.scroll.on('scrollStart', (pos) => {
+            this.$emit(EVENT_SCROLL_START, pos)
+          })
+        }
+        if (this.options.listenScroll && !this.pullDownRefresh && this.options.probeType !== 0) {
           this.scroll.on('scroll', (pos) => {
             this.$emit(EVENT_SCROLL, pos)
           })
         }
-        if (this.options.listenBeforeScroll) {
-          this.scroll.on('beforeScrollStart', () => {
-            this.$emit(EVENT_BEFORE_SCROLL_START)
+        if (this.options.listenScrollEnd) {
+          this.scroll.on('scrollEnd', (pos) => {
+            this.$emit(EVENT_SCROLL_END, pos)
+          })
+        }
+        if (this.options.listenTouchEnd) {
+          this.scroll.on('touchEnd', (pos) => {
+            this.$emit(EVENT_TOUCH_END, pos)
+          })
+        }
+        if (this.options.listenFlick) {
+          this.scroll.on('flick', () => {
+            this.$emit(EVENT_FLICK)
+          })
+        }
+        if (this.options.listenRefresh) {
+          this.scroll.on('refresh', () => {
+            this.$emit(EVENT_REFRESH)
+          })
+        }
+        if (this.options.listenDestroy) {
+          this.scroll.on('refresh', () => {
+            this.$emit(EVENT_DESTROY)
           })
         }
         if (this.pullDownRefresh) {
@@ -189,12 +219,10 @@
         return this.$refs.scrollWrapper.offsetHeight
       },
       _initPullDownRefresh() {
-        this.scroll.on('pullingDown', () => {
-          this.$emit(EVENT_PULLING_DOWN)
-          this.beforePullDown = false
-          this.isPullingDown = true
-        })
         this.scroll.on('scroll', (pos) => {
+          if (this.options.listenScroll && this.options.probeType !== 0) {
+            this.$emit(EVENT_SCROLL, pos)
+          }
           if (this.beforePullDown) {
             this.bubbleY = Math.max(0, pos.y + this.pullDownInitTop)
             this.pullDownStyle = `top:${Math.min(pos.y + this.pullDownInitTop, 10)}px`
@@ -204,6 +232,11 @@
           if (this.isRebounding) {
             this.pullDownStyle = `top:${Math.min(pos.y - 30, 10)}px`
           }
+        })
+        this.scroll.on('pullingDown', () => {
+          this.$emit(EVENT_PULLING_DOWN)
+          this.beforePullDown = false
+          this.isPullingDown = true
         })
       },
       _reboundPullDown() {

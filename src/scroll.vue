@@ -3,7 +3,11 @@
     <slot name="top"></slot>
     <scroll-list ref="scroll" :data="data"
                :options="scrollOptions" @pulling-down="onPullingDown"
-                 @pulling-up="onPullingUp">
+                 @before-scroll-start="onBeforeScrollStart"
+                 @pulling-up="onPullingUp" @scroll="onScroll"
+                 @scroll-start="onScrollStart" @scroll-end="onScrollEnd"
+                 @touch-end="onTouchEnd" @flick="onFlick" @refresh="onRefresh"
+                 @destroy="onDestroy">
       <slot name="pulldown"></slot>
       <slot></slot>
       <slot name="pullup"></slot>
@@ -14,7 +18,12 @@
 
 <script type="text/ecmascript-6">
   import ScrollList from './scroll-list'
-  import {EVENT_PULLING_DOWN, EVENT_PULLING_UP, DIRECTION_V} from './common/js/config'
+  import {
+    EVENT_PULLING_DOWN, EVENT_PULLING_UP,
+    DIRECTION_V, EVENT_BEFORE_SCROLL_START, EVENT_SCROLL,
+    EVENT_SCROLL_START, EVENT_SCROLL_END, EVENT_TOUCH_END,
+    EVENT_FLICK, EVENT_REFRESH, EVENT_DESTROY
+  } from './common/js/config'
 
   const COMPONENT_NAME = 'vue-scroll'
 
@@ -87,6 +96,14 @@
         type: Boolean,
         default: false
       },
+      refreshDelay: {
+        type: Number,
+        default: 20
+      },
+      initMinHeight: {
+        type: Boolean,
+        default: true
+      },
       listenScroll: {
         type: Boolean,
         default: false
@@ -95,13 +112,29 @@
         type: Boolean,
         default: false
       },
-      refreshDelay: {
-        type: Number,
-        default: 20
-      },
-      initMinHeight: {
+      listenScrollStart: {
         type: Boolean,
-        default: true
+        default: false
+      },
+      listenScrollEnd: {
+        type: Boolean,
+        default: false
+      },
+      listenTouchEnd: {
+        type: Boolean,
+        default: false
+      },
+      listenFlick: {
+        type: Boolean,
+        default: false
+      },
+      listenRefresh: {
+        type: Boolean,
+        default: false
+      },
+      listenDestroy: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -114,10 +147,16 @@
           click: this.click,
           probeType: this.probeType,
           tap: this.tap,
+          refreshDelay: this.refreshDelay,
+          initMinHeight: this.initMinHeight,
           listenScroll: this.listenScroll,
           listenBeforeScroll: this.listenBeforeScroll,
-          refreshDelay: this.refreshDelay,
-          initMinHeight: this.initMinHeight
+          listenScrollStart: this.listenScrollStart,
+          listenScrollEnd: this.listenScrollEnd,
+          listenTouchEnd: this.listenTouchEnd,
+          listenFlick: this.listenFlick,
+          listenRefresh: this.listenRefresh,
+          listenDestroy: this.listenDestroy
         }
       },
       scrollbarObj() {
@@ -142,6 +181,30 @@
       }
     },
     methods: {
+      onScroll(pos) {
+        this.$emit(EVENT_SCROLL, pos)
+      },
+      onBeforeScrollStart() {
+        this.$emit(EVENT_BEFORE_SCROLL_START)
+      },
+      onScrollStart(pos) {
+        this.$emit(EVENT_SCROLL_START, pos)
+      },
+      onScrollEnd(pos) {
+        this.$emit(EVENT_SCROLL_END, pos)
+      },
+      onTouchEnd(pos) {
+        this.$emit(EVENT_TOUCH_END, pos)
+      },
+      onFlick() {
+        this.$emit(EVENT_FLICK)
+      },
+      onRefresh() {
+        this.$emit(EVENT_REFRESH)
+      },
+      onDestroy() {
+        this.$emit(EVENT_DESTROY)
+      },
       onPullingDown() {
         this.$emit(EVENT_PULLING_DOWN)
       },

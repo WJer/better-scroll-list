@@ -1,11 +1,12 @@
 {
     "name": "better-scroll-list",
-    "version": "1.0.0",
+    "version": "0.5.1",
     "description": "A pull-up load and drop-down refresh data plugin",
-    "main": "index.js",
+    "main": "dist/better-scroll-list.js",
     "scripts": {
         "build": "node build/build.js",
-        "dev": "node build/dev-server.js"
+        "dev": "node build/dev-server.js",
+        "release": "bash ./build/release/publish.sh"
     },
     "repository": {
         "type": "git",

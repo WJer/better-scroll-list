@@ -10,7 +10,7 @@ var utils = require('./utils')
 var ora = require('ora')
 var webpack = require('webpack')
 var webpackConfig = require('./webpack.prod.conf')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
+// var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
@@ -39,11 +39,11 @@ function buildPack(webpackConfig, cb, spinnerText) {
 buildPack(webpackConfig, function () {
   webpackConfig.output.filename = utils.assetsPath('[name].min.js')
   webpackConfig.output.chunkFilename = '[name].min.js'
-  webpackConfig.plugins.splice(2, 1, new ExtractTextPlugin(utils.assetsPath('[name].min.css')), new OptimizeCSSPlugin({
-    cssProcessorOptions: {
-      safe: true
-    }
-  }))
+  // webpackConfig.plugins.splice(2, 1, new ExtractTextPlugin(utils.assetsPath('[name].min.css')), new OptimizeCSSPlugin({
+  //   cssProcessorOptions: {
+  //     safe: true
+  //   }
+  // }))
   // add UglifyJsPlugin
   webpackConfig.plugins.splice(2, 0, new webpack.optimize.UglifyJsPlugin({
     compress: {

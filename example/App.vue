@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <vue-scroll :data="items" @pulling-up="onPullingUp" @pulling-down="onPullingDown" ref="scroll">
-      <ul class="cube-scroll-list">
+      <ul class="scroll-list">
         <li class="scroll-item" v-for="item in items">{{item}}</li>
       </ul>
     </vue-scroll>
