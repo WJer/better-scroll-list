@@ -14,7 +14,7 @@ node ./build/release/replace-version.js
 npm publish
 # checkout dist/better-scroll-list.js
 git checkout dist/better-scroll-list.js
-git checkout dev
+git checkout master
 git rebase master
-git push origin dev
+git push origin master
 git checkout master
