@@ -14,15 +14,19 @@
 
 <script type="text/ecmascript-6">
   import ScrollList from './scroll-list'
-  import {scrollMixin} from './common/js/mixins'
-  import {EVENT_PULLING_DOWN, EVENT_PULLING_UP} from './common/js/config'
+  import {EVENT_PULLING_DOWN, EVENT_PULLING_UP, DIRECTION_V} from './common/js/config'
 
   const COMPONENT_NAME = 'vue-scroll'
 
   export default {
     name: COMPONENT_NAME,
-    mixins: [scrollMixin],
     props: {
+      data: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
       scrollbar: {
         type: Boolean,
         default: true
@@ -66,6 +70,38 @@
       pullUpLoadNoMoreTxt: {
         type: String,
         default: '没有更多了'
+      },
+      direction: {
+        type: String,
+        default: DIRECTION_V
+      },
+      click: {
+        type: Boolean,
+        default: false
+      },
+      probeType: {
+        type: Number,
+        default: 0
+      },
+      tap: {
+        type: Boolean,
+        default: false
+      },
+      listenScroll: {
+        type: Boolean,
+        default: false
+      },
+      listenBeforeScroll: {
+        type: Boolean,
+        default: false
+      },
+      refreshDelay: {
+        type: Number,
+        default: 20
+      },
+      initMinHeight: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {
@@ -73,7 +109,15 @@
         return {
           pullDownRefresh: this.pullDownRefreshObj,
           pullUpLoad: this.pullUpLoadObj,
-          scrollbar: this.scrollbarObj
+          scrollbar: this.scrollbarObj,
+          direction: this.direction,
+          click: this.click,
+          probeType: this.probeType,
+          tap: this.tap,
+          listenScroll: this.listenScroll,
+          listenBeforeScroll: this.listenBeforeScroll,
+          refreshDelay: this.refreshDelay,
+          initMinHeight: this.initMinHeight
         }
       },
       scrollbarObj() {
@@ -124,6 +168,12 @@
       },
       rebuild() {
         this.$refs.scroll && this.$refs.scroll.rebuild()
+      },
+      forceUpdate() {
+        this.$refs.scroll && this.$refs.scroll.forceUpdate()
+      },
+      errorUpdate() {
+        this.$refs.scroll && this.$refs.scroll.errorUpdate()
       }
     },
     components: {

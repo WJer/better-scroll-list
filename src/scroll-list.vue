@@ -30,7 +30,7 @@
              <loading></loading>
            </div>
           <div v-else>
-            <span>刷新成功</span>
+            <span>{{refreshTxt}}</span>
           </div>
         </div>
       </div>
@@ -43,7 +43,6 @@
   import Loading from './components/loading/loading'
   import BScroll from 'better-scroll'
   import {getRect} from './common/js/utils'
-  import {scrollMixin} from './common/js/mixins'
   import {EVENT_PULLING_DOWN, EVENT_PULLING_UP, DIRECTION_H, DIRECTION_V} from './common/js/config'
 
   const COMPONENT_NAME = 'scroll-list'
@@ -67,7 +66,20 @@
 
   export default {
     name: COMPONENT_NAME,
-    mixins: [scrollMixin],
+    props: {
+      data: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+      options: {
+        type: Object,
+        default() {
+          return {}
+        }
+      }
+    },
     data() {
       return {
         beforePullDown: true,
@@ -115,16 +127,16 @@
         }
         this.setScrollViewMinHeight()
         let options = Object.assign({}, DEFAULT_OPTIONS, {
-          scrollY: this.direction === DIRECTION_V,
-          scrollX: this.direction === DIRECTION_H
+          scrollY: this.options.direction === DIRECTION_V,
+          scrollX: this.options.direction === DIRECTION_H
         }, this.options)
         this.scroll = new BScroll(this.$refs.wrapper, options)
-        if (this.listenScroll) {
+        if (this.options.listenScroll) {
           this.scroll.on('scroll', (pos) => {
             this.$emit(EVENT_SCROLL, pos)
           })
         }
-        if (this.listenBeforeScroll) {
+        if (this.options.listenBeforeScroll) {
           this.scroll.on('beforeScrollStart', () => {
             this.$emit(EVENT_BEFORE_SCROLL_START)
           })
@@ -163,7 +175,7 @@
         }
       },
       setScrollViewMinHeight() {
-        if (this.$refs.scrollWrapper && ((this.pullDownRefresh || this.pullUpLoad) || this.initMinHeight)) {
+        if (this.$refs.scrollWrapper && ((this.pullDownRefresh || this.pullUpLoad) || this.options.initMinHeight)) {
           let wrapperHeight = getRect(this.$refs.wrapper).height
           let contentHeight = getRect(this.$refs.scrollWrapper).height - 1
           if (contentHeight <= wrapperHeight) {
@@ -247,7 +259,7 @@
       data() {
         setTimeout(() => {
           this.forceUpdate(true)
-        }, this.refreshDelay)
+        }, this.options.refreshDelay)
       }
     },
     components: {
