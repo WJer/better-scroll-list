@@ -1,6 +1,6 @@
 import Scroll from './scroll'
 
-Scroll.version = __VERSION__
+Scroll.version = '0.5.1'
 Scroll.install = function(Vue) {
   Vue.component(Scroll.name, Scroll)
 }
