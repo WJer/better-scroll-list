@@ -1,6 +1,6 @@
 {
     "name": "better-scroll-list",
-    "version": "0.5.2",
+    "version": "0.5.4",
     "description": "A pull-up load and drop-down refresh data plugin",
     "main": "dist/better-scroll-list.js",
     "scripts": {
