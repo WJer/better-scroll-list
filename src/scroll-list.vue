@@ -15,31 +15,18 @@
           </div>
         </slot>
     </div>
-    <slot name="pullDown"
+    <slot name="pulldown"
           :pullDownRefresh="pullDownRefresh"
           :pullDownStyle="pullDownStyle"
           :beforePullDown="beforePullDown"
           :isPullingDown="isPullingDown"
-          :bubbleY="bubbleY">
-      <div class="pulldown-wrapper" :style="pullDownStyle" v-if="pullDownRefresh">
-        <div class="before-trigger" v-if="beforePullDown">
-          <bubble :y="bubbleY"></bubble>
-        </div>
-        <div class="after-trigger" v-else>
-           <div class="loading" v-if="isPullingDown">
-             <loading></loading>
-           </div>
-          <div v-else>
-            <span>{{refreshTxt}}</span>
-          </div>
-        </div>
-      </div>
+          :bubbleY="bubbleY"
+          :refreshTxt="refreshTxt">
     </slot>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Bubble from './components/bubble/bubble'
   import Loading from './components/loading/loading'
   import BScroll from 'better-scroll'
   import {getRect} from './common/js/utils'
@@ -296,7 +283,6 @@
       }
     },
     components: {
-      Bubble,
       Loading
     }
   }
@@ -315,16 +301,6 @@
       position: relative
       z-index:1
       background-color: $scroll-content-bgc
-    .pulldown-wrapper
-      position: absolute
-      width: 100%
-      left: 0
-      display: flex
-      justify-content: center
-      align-items: center
-      transition: all
-      .after-trigger
-        margin-top: 5px
     .pullup-wrapper
       width: 100%
       display: flex

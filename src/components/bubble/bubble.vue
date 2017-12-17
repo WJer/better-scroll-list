@@ -4,6 +4,7 @@
 
 <script type="text/ecmascript-6">
   export default {
+    name: 'bubble',
     props: {
       y: {
         type: Number,

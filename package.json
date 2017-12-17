@@ -6,7 +6,8 @@
     "scripts": {
         "build": "node build/build.js",
         "dev": "node build/dev-server.js",
-        "release": "bash ./build/release/publish.sh"
+        "release": "bash ./build/release/publish.sh",
+        "demo-build": "node build/example/build.js"
     },
     "repository": {
         "type": "git",
@@ -71,6 +72,7 @@
         "url-loader": "^0.6.2",
         "vue": "^2.5.11",
         "vue-loader": "^13.5.0",
+        "vue-router": "^3.0.1",
         "vue-style-loader": "^3.0.3",
         "vue-template-compiler": "^2.5.11",
         "webpack": "^3.10.0",

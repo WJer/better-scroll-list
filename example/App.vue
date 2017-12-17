@@ -1,70 +1,48 @@
 <template>
   <div id="app">
-    <vue-scroll :data="items" @pulling-up="onPullingUp" @pulling-down="onPullingDown" ref="scroll">
-      <ul class="scroll-list">
-        <li class="scroll-item" v-for="item in items">{{item}}</li>
+    <header class="demo-bar">
+      <h1>better-scroll-list</h1>
+    </header>
+    <section class="demo-content" ref="demoApp">
+      <ul class="demo-list">
+        <li class="demo-item border-bottom-1px" v-for="component in components">
+          <router-link class="link" :to="component.path">{{component.text}}</router-link>
+        </li>
       </ul>
-    </vue-scroll>
+    </section>
+    <list-view></list-view>
   </div>
 </template>
 <script type="text/ecmascript-6">
-  const _data = [
-    'I am line 1',
-    'I am line 2',
-    'I am line 3',
-    'I am line 4',
-    'I am line 5',
-    'I am line 6',
-    'I am line 7',
-    'I am line 8',
-    'I am line 9',
-    'I am line 10',
-    'I am line 11',
-    'I am line 12',
-    'I am line 13',
-    'I am line 14',
-    'I am line 15'
-  ]
+  import BScroll from 'better-scroll'
+  import ListView from 'components/view'
 
   export default {
+    name: 'app',
     data() {
       return {
-        items: _data,
-        itemIndex: _data.length
+        components: [
+          {
+            path: '/normal-list',
+            text: 'Normal list'
+          },
+          {
+            path: '/custom-pull-down-list',
+            text: 'custom-pull-down-list'
+          }
+        ]
       }
     },
-    methods: {
-      onPullingDown() {
-        // 模拟更新数据
-        setTimeout(() => {
-          if (Math.random() > 0.5) {
-            // 如果有新数据
-            this.items.unshift(`I am new data: ${+new Date()}`)
-          } else {
-            // 如果没有新数据
-            this.$refs.scroll.errorUpdate()
-          }
-        }, 1000)
-      },
-      onPullingUp() {
-        // 更新数据
-        setTimeout(() => {
-          if (Math.random() > 0.5) {
-            // 如果有新数据
-            let newPage = [
-              'I am line ' + ++this.itemIndex,
-              'I am line ' + ++this.itemIndex,
-              'I am line ' + ++this.itemIndex,
-              'I am line ' + ++this.itemIndex,
-              'I am line ' + ++this.itemIndex
-            ]
-            this.items = this.items.concat(newPage)
-          } else {
-            // 如果没有新数据
-            this.$refs.scroll.forceUpdate()
-          }
-        }, 1000)
-      }
+    mounted() {
+      this.$nextTick(() => {
+        /* eslint-disable no-new */
+        new BScroll(this.$refs.demoApp, {
+          click: true
+        })
+      })
+    },
+    components: {
+      ListView
     }
   }
 </script>
@@ -72,12 +50,40 @@
 <style lang="stylus" rel="stylesheet/stylus">
   html,body,#app
     height:100%
-
-  .scroll-item
-    height: 60px
-    line-height: 60px
-    box-sizing:border-box
-    font-size: 16px
-    padding-left: 20px
-    border-bottom:1px solid #333
+  body
+    background-color: #fff
+  .demo-bar
+    position: fixed
+    z-index: 10
+    right: 0
+    left: 0
+    height: 44px
+    line-height: 44px
+    text-align: center
+    background-color: #f7f7f7
+    box-shadow: 0 1px 6px #ccc
+    -webkit-backface-visibility: hidden
+    backface-visibility: hidden
+    h1
+      font-size: 18px
+      font-weight: 500
+  .demo-content
+    position: fixed
+    width: 100%
+    top: 44px
+    left: 0
+    bottom: 0
+    overflow: scroll
+    .demo-list
+      padding-left: 10px
+      .demo-item
+        height: 40px
+        line-height: 40px
+        .link
+          display: block
+          position: relative
+          width: 100%
+          color: #333
+          text-decoration: none
+          outline: 0
 </style>

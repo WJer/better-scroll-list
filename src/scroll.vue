@@ -8,9 +8,29 @@
                  @scroll-start="onScrollStart" @scroll-end="onScrollEnd"
                  @touch-end="onTouchEnd" @flick="onFlick" @refresh="onRefresh"
                  @destroy="onDestroy">
-      <slot name="pulldown"></slot>
+      <template slot="pulldown" slot-scope="props">
+        <slot name="pulldown" :pullDownRefresh="props.pullDownRefresh"
+              :pullDownStyle="props.pullDownStyle"
+              :beforePullDown="props.beforePullDown"
+              :isPullingDown="props.isPullingDown"
+              :bubbleY="props.bubbleY"
+              :refreshTxt="props.refreshTxt">
+          <div class="pulldown-wrapper" :style="props.pullDownStyle" v-if="props.pullDownRefresh">
+            <div class="before-trigger" v-if="props.beforePullDown">
+              <bubble :y="props.bubbleY"></bubble>
+            </div>
+            <div class="after-trigger" v-else>
+              <div class="loading" v-if="props.isPullingDown">
+                <loading></loading>
+              </div>
+              <div v-else>
+                <span>{{props.refreshTxt}}</span>
+              </div>
+            </div>
+          </div>
+        </slot>
+      </template>
       <slot></slot>
-      <slot name="pullup"></slot>
     </scroll-list>
     <slot name="bottom"></slot>
   </div>
@@ -18,6 +38,8 @@
 
 <script type="text/ecmascript-6">
   import ScrollList from './scroll-list'
+  import Bubble from './components/bubble/bubble'
+  import Loading from './components/loading/loading'
   import {
     EVENT_PULLING_DOWN, EVENT_PULLING_UP,
     DIRECTION_V, EVENT_BEFORE_SCROLL_START, EVENT_SCROLL,
@@ -137,6 +159,15 @@
         default: false
       }
     },
+    data() {
+      return {
+        beforePullDown: true,
+        isPullingDown: false,
+        isErrorPullingDown: false,
+        bubbleY: 0,
+        pullDownStyle: ''
+      }
+    },
     computed: {
       scrollOptions() {
         return {
@@ -240,7 +271,9 @@
       }
     },
     components: {
-      ScrollList
+      ScrollList,
+      Bubble,
+      Loading
     }
   }
 </script>
@@ -250,4 +283,14 @@
     display: flex
     flex-direction: column
     height:100%
+    .pulldown-wrapper
+      position: absolute
+      width: 100%
+      left: 0
+      display: flex
+      justify-content: center
+      align-items: center
+      transition: all
+      .after-trigger
+        margin-top: 5px
 </style>
