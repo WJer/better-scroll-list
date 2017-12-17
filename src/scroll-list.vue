@@ -171,10 +171,10 @@
             this.$emit(EVENT_DESTROY)
           })
         }
-        if (this.pullDownRefresh) {
+        if (this.pullDownRefresh && this.options.direction !== DIRECTION_H) {
           this._initPullDownRefresh()
         }
-        if (this.pullUpLoad) {
+        if (this.pullUpLoad && this.options.direction !== DIRECTION_H) {
           this._initPullUpLoad()
         }
       },
