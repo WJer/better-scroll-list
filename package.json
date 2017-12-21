@@ -1,6 +1,6 @@
 {
     "name": "better-scroll-list",
-    "version": "0.5.6",
+    "version": "0.5.7",
     "description": "A pull-up load and drop-down refresh data plugin",
     "main": "dist/better-scroll-list.js",
     "scripts": {
@@ -25,7 +25,7 @@
     },
     "homepage": "https://github.com/xwpongithub/better-scroll-list#readme",
     "dependencies": {
-        "better-scroll": "^1.6.1"
+        "better-scroll": "^1.6.2"
     },
     "devDependencies": {
         "autoprefixer": "^7.2.1",
