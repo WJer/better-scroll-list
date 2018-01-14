@@ -280,8 +280,6 @@
 
 <style lang="stylus" rel="stylesheet/stylus">
   .vue-scroll
-    display: flex
-    flex-direction: column
     height:100%
     .pulldown-wrapper
       position: absolute

@@ -105,7 +105,7 @@
       this.pullDownInitTop = -50
     },
     mounted() {
-      this.$nextTick(this.initScroll)
+      setTimeout(this.initScroll, this.options.refreshDelay)
     },
     methods: {
       initScroll() {
@@ -293,7 +293,6 @@
 
   .scroll-list-wrapper
     position: relative
-    flex: 1
     overflow:hidden
     width:100%
     background-color: $scroll-content-bgc
